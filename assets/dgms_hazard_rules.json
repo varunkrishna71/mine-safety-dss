@@ -1,0 +1,18 @@
+{
+  "hazards": {
+    "Methane Accumulation": ["methane", "ch4", "inflammable gas", "firedamp", "gas buildup"],
+    "Roof/Strata Instability": ["roof fall", "side fall", "spalling", "strata", "pot hole", "support failure"],
+    "Ventilation Failure": ["ventilation", "fan stop", "air current", "stoppage", "auxiliary fan", "stagnant"],
+    "Respirable Dust": ["dust", "coal dust", "silica", "sampling", "water spray", "mist"],
+    "Water Inrush": ["water", "seepage", "inundation", "old workings", "pumping", "dewatering"],
+    "Machinery Accident": ["haulage", "conveyor", "dumper", "shovels", "guarding", "sdl", "ldt"]
+  },
+  "recommendations": {
+    "Methane Accumulation": "Check Main Mechanical Ventilator (MMV) water gauge; increase air quantity in the district.",
+    "Roof/Strata Instability": "Immediately implement Systematic Support Rules (SSR); check roof bolt torque.",
+    "Ventilation Failure": "Verify auxiliary fan positioning; ensure air velocity > 0.5 m/s at face.",
+    "Respirable Dust": "Enhance water infusion at the face; ensure dust extractors are operational.",
+    "Water Inrush": "Drill advance boreholes as per CMR 2017; verify barrier thickness.",
+    "Machinery Accident": "Enforce 'No-Go' zones; inspect audio-visual alarms (AVA) on HEMM."
+  }
+}
