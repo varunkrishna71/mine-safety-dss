@@ -1,0 +1,8 @@
+streamlit
+pandas
+plotly
+rapidfuzz
+PyPDF2
+python-docx
+wordcloud
+matplotlib
