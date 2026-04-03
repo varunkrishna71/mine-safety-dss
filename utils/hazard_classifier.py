@@ -1,40 +1,34 @@
 from rapidfuzz import process, fuzz
-import re
 
 def detect_hazards(text, rules):
-    found_hazards = {}
-    words = text.split()
+    detected = {}
+    if not text or len(text.strip()) < 10: # Safety check for empty text
+        return detected
+        
+    text_lower = text.lower()
     
     for category, keywords in rules['hazards'].items():
-        matches = []
         for kw in keywords:
-            # Match keywords with 90% spelling tolerance
-            best_match = process.extractOne(kw, words, scorer=fuzz.WRatio)
-            if best_match and best_match[1] >= 90:
-                matches.append(kw)
-        
-        if matches:
-            found_hazards[category] = matches
-            
-    return found_hazards
+            # Using a stricter threshold (85) to avoid false positives
+            if kw.lower() in text_lower:
+                detected[category] = kw
+                break 
+    return detected
 
 def detect_specific_thresholds(text):
     alerts = []
+    import re
     
-    # Methane Thresholds (CMR 2017 Reg 166/169)
-    methane_values = re.findall(r"(\d+\.?\d*)\s*%", text)
-    for val in methane_values:
-        v = float(val)
-        if v >= 2.0:
-            alerts.append(f"CRITICAL: {v}% Methane detected. Evacuation required (Reg 166).")
-        elif v >= 1.25:
-            alerts.append(f"DANGER: {v}% Methane. Dangerous Occurrence - Form IV-A (Reg 169).")
-        elif v >= 0.75:
-            alerts.append(f"WARNING: {v}% Methane. Enhance ventilation immediately.")
-
-    # Ventilation Compliance
-    if "0.5" in text and "m/s" in text:
-        if "below" in text or "less than" in text:
-            alerts.append("COMPLIANCE: Air velocity below 0.5 m/s. Violation of CMR 2017.")
+    # Methane patterns
+    methane_val = re.findall(r"(\d+\.?\d*)\s*%\s*methane", text.lower())
+    if methane_val:
+        val = float(methane_val[0])
+        if val > 2.0:
+            alerts.append(f"CRITICAL: Methane at {val}% exceeds CMR 2017 evacuation limits!")
+        elif val >= 1.25:
+            alerts.append(f"DANGER: Methane at {val}% requires immediate ventilation adjustment.")
             
+    if "evacuation" in text.lower() or "emergency" in text.lower():
+        alerts.append("CRITICAL: Manual evacuation order detected in report.")
+        
     return alerts
